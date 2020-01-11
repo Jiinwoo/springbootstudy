@@ -11,7 +11,7 @@ import java.sql.Connection;
 import java.sql.Statement;
 
 @Component
-public class MySQLRunner implements ApplicationRunner {
+public class PostgreSQLRunner implements ApplicationRunner {
 
     @Autowired
     DataSource dataSource;
@@ -23,16 +23,17 @@ public class MySQLRunner implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         try(Connection connection = dataSource.getConnection()){
             System.out.println(dataSource.getClass());
+            System.out.println(connection.getMetaData().getDriverName());
             System.out.println(connection.getMetaData().getURL());
             System.out.println(connection.getMetaData().getUserName());
 
             // table 생성
             Statement statement = connection.createStatement();
-            statement.executeUpdate("DROP TABLE IF EXISTS user");
-            String sql = "CREATE TABLE USER (id INTEGER NOT NULL, name VARCHAR(255), PRIMARY KEY (id))";
+            statement.executeUpdate("DROP TABLE IF EXISTS users");
+            String sql = "CREATE TABLE USERS (id INTEGER NOT NULL, name VARCHAR(255), PRIMARY KEY (id))";
             statement.executeUpdate(sql);
 
         }
-        jdbcTemplate.execute("INSERT INTO USER VALUES(1,'jinwoo')");
+        jdbcTemplate.execute("INSERT INTO USERS VALUES(1,'jinwoo')");
     }
 }
